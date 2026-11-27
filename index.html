@@ -58,6 +58,8 @@ legend{font-weight:600;font-size:12px;color:#8b6b58;padding-right:6px}
   .sheetlbl{display:none}
   .sheetwrap:last-child .sheet{break-after:auto !important;page-break-after:auto !important}
 }
+.cpick{display:flex;gap:6px;align-items:center}
+.row input.hex{width:74px;padding:4px 6px;border:1px solid #ccc;border-radius:6px;font:inherit;font-family:ui-monospace,Menlo,monospace;font-size:12px;text-transform:uppercase}
 </style>
 <style id="dyn"></style>
 </head>
@@ -107,10 +109,10 @@ legend{font-weight:600;font-size:12px;color:#8b6b58;padding-right:6px}
   </fieldset>
 
   <fieldset><legend>색과 선</legend>
-    <div class="row"><label>선·점 색</label><input type="color" data-k="lineColor"></div>
+    <div class="row"><label>선·점 색</label><span class="cpick"><input type="color" data-k="lineColor"><input type="text" class="hex" data-hk="lineColor" maxlength="7" spellcheck="false" autocomplete="off"></span></div>
     <div class="row"><label>진하기 (%)</label><input type="number" data-k="opacity" step="5" min="5" max="100"></div>
     <div class="row" id="lineWRow"><label>선 굵기 (mm)</label><input type="number" data-k="lineW" step=".05" min=".05"></div>
-    <div class="row"><label>글자 색</label><input type="color" data-k="ink"></div>
+    <div class="row"><label>글자 색</label><span class="cpick"><input type="color" data-k="ink"><input type="text" class="hex" data-hk="ink" maxlength="7" spellcheck="false" autocomplete="off"></span></div>
   </fieldset>
 
   <fieldset><legend>크기와 여백 (mm)</legend>
@@ -154,7 +156,7 @@ const DEFAULTS = {
   pattern:'dot', spLined:6, spGrid:5, spDot:5, lineStyle:'solid', marginLine:false, fill:true, marginPos:12, major:0, dotSize:.35,
   align:'center',
   head:'none', headTxt:'date', noTxt:'no.', fsHead:6, pageNo:false, pageStart:1, font:"'Open Sans'", customFont:'', italic:true,
-  lineColor:'#5b4636', opacity:45, lineW:.12, ink:'#5b4636',
+  lineColor:'#1a1a1a', opacity:45, lineW:.12, ink:'#5b4636',
   preset:'custom', w:86, h:171, mRing:7, mFree:5, mTop:6, mBot:6, count:10,
   sheet:'orig', orient:'auto', safe:5, duplex:'single', backX:0, backY:0, crop:true, zoom:1.8, showRing:true
 };
@@ -163,6 +165,7 @@ const CUSTOM_DEFAULT = [86, 171]; // ‘직접’의 기본 크기
 const KEY = 'note-editor-v1';
 let st = {...DEFAULTS};
 try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) st = {...DEFAULTS, ...s}; } catch(e) {}
+if (st.lineVer !== 2) { if (st.lineColor === '#5b4636') st.lineColor = '#1a1a1a'; st.lineVer = 2; } // 예전 기본 선 색으로 저장된 설정은 새 기본값으로
 if (st.preset === '86x171') st.preset = 'custom'; // 예전 설정
 if (st.sheet === 'a3') st.sheet = 'a4'; // 출력 용지에서 A3를 빼고 A5를 넣었어요
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e) {} };
@@ -365,6 +368,20 @@ function render() {
   save();
 }
 
+// 색은 고르개나 헥사 코드(#RRGGBB, #RGB, # 생략 가능)로 넣을 수 있어요
+function bindHex() {
+  document.querySelectorAll('input.hex').forEach(h => {
+    const k = h.dataset.hk, pick = document.querySelector(`input[type=color][data-k="${k}"]`);
+    h.value = String(st[k]).toUpperCase();
+    h.oninput = () => {
+      let v = h.value.trim(); if (v[0] !== '#') v = '#' + v;
+      if (/^#[0-9a-f]{3}$/i.test(v)) v = '#' + [...v.slice(1)].map(c => c + c).join('');
+      if (/^#[0-9a-f]{6}$/i.test(v)) { st[k] = v.toLowerCase(); pick.value = st[k]; pick.oninput && pick.oninput(); }
+    };
+    h.onblur = () => { h.value = String(st[k]).toUpperCase(); };
+    if (!pick._hex) { pick._hex = 1; pick.addEventListener('input', () => { if (document.activeElement !== h) h.value = pick.value.toUpperCase(); }); }
+  });
+}
 function bind() {
   document.querySelectorAll('[data-k]').forEach(el => {
     const k = el.dataset.k;
@@ -390,6 +407,7 @@ function bind() {
       };
     }
   });
+  bindHex();
 }
 document.querySelectorAll('#pick button').forEach(b => b.onclick = () => { st.pattern = b.dataset.v; render(); });
 window.applySettings = o => { st = {...DEFAULTS, ...o}; bind(); render(); };
