@@ -48,6 +48,7 @@ Settings are kept in your browser. Use **처음 설정으로 되돌리기** (Res
 - Set scale to **100% (actual size)** and margins to **None**, and turn off **headers and footers**.
 - If the paper size isn't picked up automatically, open the page in **Chrome**.
 - For double-sided printing, use **flip on long edge** for portrait layouts and **flip on short edge** for landscape layouts. The panel shows which one to use.
+- If the back is slightly off from the front, enter values in **back offset X / Y (mm)**. On A4 / A5 double-sided layouts this shifts only the back sheets. Positive X moves right and positive Y moves down, as seen looking at the back. Print a test sheet, hold it to the light, and enter the crop-mark offset in the opposite direction.
 - Most printers can't print the outer 3–5mm. Enter that value as the **printer safe margin** so nothing gets cut off. For full-bleed refills, printing on A4 and trimming along the crop marks (which run from each page boundary to the paper edge) gives the cleanest edges.
 
 ## Related tools
