@@ -27,7 +27,7 @@ The default size is 86×171mm. A5, A4, or any custom size also works.
   - **Top:** start right at the top/left margin and leave the rest at the bottom/right.
 - **Header:** a writing spot for the date (`date`) or number and date (`no.` / `date`) at the top. Labels are editable.
 - **Page numbers:** placed in the bottom corner away from the ring, with a custom starting number.
-- **Color and lines:** line/dot color (default dark brown #5B4636), opacity, line weight, text color. The line weight carries through to the printout.
+- **Color and lines:** line/dot color (default #1A1A1A), opacity, line weight, text color. The line weight carries through to the printout. Colors can be picked or typed as a hex code (#1A1A1A).
 - **Size and margins:** paper size (A5, A4, custom; default 86×171mm), ring-side / outer / top / bottom margins, page count.
 - **Print layout:** save at refill size, or place several pages on A4 or A5 with crop marks. Single- or double-sided; on back pages (even pages) the ring margin switches sides.
 
