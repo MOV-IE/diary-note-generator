@@ -157,7 +157,7 @@ const DEFAULTS = {
   align:'center',
   head:'none', headTxt:'date', noTxt:'no.', fsHead:6, pageNo:false, pageStart:1, font:"'Open Sans'", customFont:'', italic:true,
   lineColor:'#1a1a1a', opacity:45, lineW:.12, ink:'#5b4636',
-  preset:'custom', w:86, h:171, mRing:7, mFree:5, mTop:6, mBot:6, count:10,
+  preset:'custom', w:86, h:171, mRing:10, mFree:5, mTop:6, mBot:6, count:10,
   sheet:'orig', orient:'auto', safe:5, duplex:'single', backX:0, backY:0, crop:true, zoom:1.8, showRing:true
 };
 const PRESETS = { a5:[148,210], a4:[210,297] };
@@ -166,6 +166,7 @@ const KEY = 'note-editor-v1';
 let st = {...DEFAULTS};
 try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) st = {...DEFAULTS, ...s}; } catch(e) {}
 if (st.lineVer !== 2) { if (st.lineColor === '#5b4636') st.lineColor = '#1a1a1a'; st.lineVer = 2; } // 예전 기본 선 색으로 저장된 설정은 새 기본값으로
+if (st.ringVer !== 2) { if (+st.mRing === 7) st.mRing = 10; st.ringVer = 2; } // 예전 기본 링 쪽 여백으로 저장된 설정은 10mm로
 if (st.preset === '86x171') st.preset = 'custom'; // 예전 설정
 if (st.sheet === 'a3') st.sheet = 'a4'; // 출력 용지에서 A3를 빼고 A5를 넣었어요
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e) {} };
